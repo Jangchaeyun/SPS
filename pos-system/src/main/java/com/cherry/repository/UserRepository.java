@@ -1,4 +1,4 @@
-package com.cherry.service.repository;
+package com.cherry.repository;
 
 import com.cherry.modal.User;
 import org.springframework.data.jpa.repository.JpaRepository;
