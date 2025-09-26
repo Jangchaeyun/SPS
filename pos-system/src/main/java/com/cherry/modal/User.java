@@ -1,9 +1,7 @@
 package com.cherry.modal;
 
 import com.cherry.domain.UserRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Email;
 
@@ -17,6 +15,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
