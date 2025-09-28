@@ -5,4 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 public enum StoreStatus {
+    ACTIVE,
+    PENDING,
+    BLOCKED
 }

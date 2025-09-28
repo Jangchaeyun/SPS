@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 public class Store {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -31,4 +32,17 @@ public class Store {
 
     private StoreStatus status;
 
+    @Embedded
+    private StoreContact contact = new StoreContact();
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        status = StoreStatus.PENDING;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
