@@ -1,5 +1,7 @@
 package com.cherry.service.Impl;
 
+import com.cherry.exceptions.UserException;
+import com.cherry.mapper.StoreMapper;
 import com.cherry.modal.Store;
 import com.cherry.modal.User;
 import com.cherry.payload.dto.StoreDTO;
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,22 +23,30 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public StoreDTO createStore(StoreDTO storeDTO, User user) {
-        return null;
+        Store store = StoreMapper.toEntity(storeDTO, user);
+
+        return StoreMapper.toDTO(storeRepository.save(store));
     }
 
     @Override
-    public Store getStoreById(Long id) {
-        return null;
+    public StoreDTO getStoreById(Long id) throws Exception {
+
+        Store store = storeRepository.findById(id).orElseThrow(
+                () -> new Exception("store not found...")
+        );
+        return StoreMapper.toDTO(store);
     }
 
     @Override
     public List<StoreDTO> getAllStores() {
-        return List.of();
+        List<Store> dtos = storeRepository.findAll();
+        return dtos.stream().map(StoreMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public Store getStoreByAdmin() {
-        return null;
+    public Store getStoreByAdmin() throws UserException {
+        User admin = userService.getCurrentUser();
+        return storeRepository.findByStoreAdminId(admin.getId());
     }
 
     @Override

@@ -2,9 +2,11 @@ package com.cherry.payload.dto;
 
 import com.cherry.modal.StoreContact;
 import com.cherry.modal.StoreStatus;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
+@Data
 public class StoreDTO {
     private Long id;
 
