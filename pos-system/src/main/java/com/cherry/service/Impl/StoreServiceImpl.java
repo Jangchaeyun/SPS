@@ -3,6 +3,7 @@ package com.cherry.service.Impl;
 import com.cherry.exceptions.UserException;
 import com.cherry.mapper.StoreMapper;
 import com.cherry.modal.Store;
+import com.cherry.modal.StoreContact;
 import com.cherry.modal.User;
 import com.cherry.payload.dto.StoreDTO;
 import com.cherry.service.StoreService;
@@ -50,8 +51,32 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public StoreDTO updateStore(StoreDTO storeDTO, User user) {
-        return null;
+    public StoreDTO updateStore(StoreDTO storeDTO, User user) throws UserException, Exception {
+        User currentUser = userService.getCurrentUser();
+        Store existing = storeRepository.findByStoreAdminId(currentUser.getId());
+
+        if (existing == null) {
+            throw new Exception("store not found");
+        }
+
+        existing.setBrand(storeDTO.getBrand());
+        existing.setDescription(storeDTO.getDescription());
+
+        if (storeDTO.getStoreType() != null) {
+            existing.setStoreType(storeDTO.getStoreType());
+        }
+
+        if (storeDTO.getContact() != null) {
+            StoreContact contact = StoreContact.builder()
+                    .address(storeDTO.getContact().getAddress())
+                    .phone(storeDTO.getContact().getPhone())
+                    .email(storeDTO.getContact().getEmail())
+                    .build();
+            existing.setContact(contact);
+        }
+
+        Store updatedStore = storeRepository.save(existing);
+        return StoreMapper.toDTO(updatedStore);
     }
 
     @Override
@@ -60,7 +85,12 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public StoreDTO getStoreByEmployee() {
-        return null;
+    public StoreDTO getStoreByEmployee() throws UserException {
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser == null) {
+            throw new UserException("you don't have permission to access this store");
+        }
+        return StoreMapper.toDTO(currentUser.getStore());
     }
 }
