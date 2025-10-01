@@ -80,8 +80,10 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public StoreDTO deleteStore(Long id) {
-        return null;
+    public void deleteStore(Long id) throws UserException {
+        Store store = getStoreByAdmin();
+
+        storeRepository.delete(store);
     }
 
     @Override
