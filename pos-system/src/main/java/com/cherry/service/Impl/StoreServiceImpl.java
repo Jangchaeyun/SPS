@@ -4,6 +4,7 @@ import com.cherry.exceptions.UserException;
 import com.cherry.mapper.StoreMapper;
 import com.cherry.modal.Store;
 import com.cherry.modal.StoreContact;
+import com.cherry.modal.StoreStatus;
 import com.cherry.modal.User;
 import com.cherry.payload.dto.StoreDTO;
 import com.cherry.service.StoreService;
@@ -45,13 +46,13 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Store getStoreByAdmin() throws UserException {
+    public Store getStoreByAdmin() throws Exception {
         User admin = userService.getCurrentUser();
         return storeRepository.findByStoreAdminId(admin.getId());
     }
 
     @Override
-    public StoreDTO updateStore(StoreDTO storeDTO, User user) throws UserException, Exception {
+    public StoreDTO updateStore(Long id, StoreDTO storeDTO) throws Exception {
         User currentUser = userService.getCurrentUser();
         Store existing = storeRepository.findByStoreAdminId(currentUser.getId());
 
@@ -80,19 +81,30 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public void deleteStore(Long id) throws UserException {
+    public void deleteStore(Long id) throws Exception {
         Store store = getStoreByAdmin();
 
         storeRepository.delete(store);
     }
 
     @Override
-    public StoreDTO getStoreByEmployee() throws UserException {
+    public StoreDTO getStoreByEmployee() throws UserException, Exception {
         User currentUser = userService.getCurrentUser();
 
         if (currentUser == null) {
             throw new UserException("you don't have permission to access this store");
         }
         return StoreMapper.toDTO(currentUser.getStore());
+    }
+
+    @Override
+    public StoreDTO moderateStore(Long id, StoreStatus status) throws Exception {
+        Store store = storeRepository.findById(id).orElseThrow(
+                () -> new Exception("store not found...")
+        );
+
+        store.setStatus(status);
+        Store updatedStore = storeRepository.save(store);
+        return StoreMapper.toDTO(updatedStore);
     }
 }
