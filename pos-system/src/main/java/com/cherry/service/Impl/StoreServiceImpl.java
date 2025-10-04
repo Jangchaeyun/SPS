@@ -46,13 +46,13 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Store getStoreByAdmin() throws Exception {
+    public Store getStoreByAdmin() throws UserException {
         User admin = userService.getCurrentUser();
         return storeRepository.findByStoreAdminId(admin.getId());
     }
 
     @Override
-    public StoreDTO updateStore(Long id, StoreDTO storeDTO) throws Exception {
+    public StoreDTO updateStore(Long id, StoreDTO storeDTO) throws Exception, UserException {
         User currentUser = userService.getCurrentUser();
         Store existing = storeRepository.findByStoreAdminId(currentUser.getId());
 
@@ -81,7 +81,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public void deleteStore(Long id) throws Exception {
+    public void deleteStore(Long id) throws UserException {
         Store store = getStoreByAdmin();
 
         storeRepository.delete(store);

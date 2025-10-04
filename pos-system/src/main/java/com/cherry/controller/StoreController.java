@@ -29,7 +29,7 @@ public class StoreController {
         return ResponseEntity.ok(storeService.createStore(storeDTO, user));
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<StoreDTO> getStoreById(
             @PathVariable Long id,
             @RequestHeader("Authorization") String jwt) throws Exception {
@@ -44,7 +44,7 @@ public class StoreController {
 
     @GetMapping("/admin")
     public ResponseEntity<StoreDTO> getStoreByAdmin(
-            @RequestHeader("Authorization") String jwt) throws Exception {
+            @RequestHeader("Authorization") String jwt) throws Exception, UserException {
         return ResponseEntity.ok(StoreMapper.toDTO(storeService.getStoreByAdmin()));
     }
 
@@ -60,7 +60,7 @@ public class StoreController {
         return ResponseEntity.ok(storeService.updateStore(id, storeDTO));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/moderate")
     public ResponseEntity<StoreDTO> moderateStore(@PathVariable Long id,
                                                 @RequestParam StoreStatus status
     )throws Exception {
@@ -68,7 +68,7 @@ public class StoreController {
     }
 
 
-    @PutMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteStore(@PathVariable Long id) throws Exception, UserException {
 
         storeService.deleteStore(id);

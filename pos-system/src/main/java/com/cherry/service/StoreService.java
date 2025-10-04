@@ -12,8 +12,8 @@ public interface StoreService {
     StoreDTO createStore(StoreDTO storeDTO, User user);
     StoreDTO getStoreById(Long id) throws Exception;
     List<StoreDTO> getAllStores();
-    Store getStoreByAdmin() throws Exception;
-    StoreDTO updateStore(Long id, StoreDTO storeDTO) throws Exception;
+    Store getStoreByAdmin() throws Exception, UserException;
+    StoreDTO updateStore(Long id, StoreDTO storeDTO) throws Exception, UserException;
     void deleteStore(Long id) throws UserException, Exception;
     StoreDTO getStoreByEmployee() throws UserException, Exception;
     StoreDTO moderateStore(Long id, StoreStatus status) throws Exception;
