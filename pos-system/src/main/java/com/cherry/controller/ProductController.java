@@ -4,6 +4,7 @@ import com.cherry.exceptions.UserException;
 import com.cherry.mapper.ProductMapper;
 import com.cherry.modal.User;
 import com.cherry.payload.dto.ProductDTO;
+import com.cherry.payload.response.ApiResponse;
 import com.cherry.service.ProductService;
 import com.cherry.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -45,11 +46,48 @@ public class ProductController {
     public ResponseEntity<ProductDTO> update(
             @PathVariable Long id,
             @RequestBody ProductDTO productDTO,
-            @RequestHeader("Authorization") String jwt) throws Exception {
+            @RequestHeader("Authorization") String jwt) throws Exception, UserException {
+        User user = userService.getUserFromJwtToken(jwt);
+
         return ResponseEntity.ok(
                 productService.updateProduct(
                         id,
-                        productDTO, null
+                        productDTO,
+                        user
+                )
+        );
+    }
+
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> delete(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String jwt) throws Exception, UserException {
+        User user = userService.getUserFromJwtToken(jwt);
+
+        productService.deleteProduct(
+                id,
+                user
+        );
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setMessage("Product deleted successfully");
+
+        return ResponseEntity.ok(
+                apiResponse
+        );
+    }
+
+    @GetMapping("/store/{storeId}/search")
+    public ResponseEntity<List<ProductDTO>> searchByKeyword(
+            @PathVariable Long storeId,
+            @RequestParam String keyword,
+            @RequestHeader("Authorization") String jwt) throws Exception {
+        return ResponseEntity.ok(
+                productService.searchProductKeyword(
+                        storeId,
+                        keyword
                 )
         );
     }
