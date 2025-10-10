@@ -7,8 +7,8 @@ import com.cherry.payload.dto.CategoryDTO;
 import java.util.List;
 
 public interface CategoryService {
-    CategoryDTO createCategory(CategoryDTO dto) throws UserException;
+    CategoryDTO createCategory(CategoryDTO dto) throws UserException, Exception;
     List<CategoryDTO> getCategoriesByStore(Long storeId);
-    CategoryDTO updateCategory(Long id, CategoryDTO dto);
-    void deleteCategory(Long id);
+    CategoryDTO updateCategory(Long id, CategoryDTO dto) throws Exception, UserException;
+    void deleteCategory(Long id) throws Exception, UserException;
 }

@@ -1,7 +1,7 @@
 package com.cherry.service.Impl;
 
 import com.cherry.exceptions.UserException;
-import com.cherry.mapper.CateoryMapper;
+import com.cherry.mapper.CategoryMapper;
 import com.cherry.modal.Category;
 import com.cherry.modal.Store;
 import com.cherry.modal.User;
@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final StoreRepository storeRepository;
 
     @Override
-    public CategoryDTO createCategory(CategoryDTO dto) throws UserException {
+    public CategoryDTO createCategory(CategoryDTO dto) throws UserException, Exception {
         User user = userService.getCurrentUser();
 
         Store store = storeRepository.findById(dto.getStoreId()).orElseThrow(
@@ -37,21 +38,38 @@ public class CategoryServiceImpl implements CategoryService {
                 .name(dto.getName())
                 .build();
 
-        return CateoryMapper.toDTO(category);
+        return CategoryMapper.toDTO(category);
     }
 
     @Override
     public List<CategoryDTO> getCategoriesByStore(Long storeId) {
-        return List.of();
+        List<Category> categories = categoryRepository.findByStoreId(storeId);
+        return categories.stream()
+                .map(
+                        CategoryMapper::toDTO
+                ).collect(Collectors.toList());
     }
 
     @Override
-    public CategoryDTO updateCategory(Long id, CategoryDTO dto) {
-        return null;
+    public CategoryDTO updateCategory(Long id, CategoryDTO dto) throws Exception, UserException {
+        Category category = categoryRepository.findById(id).orElseThrow(
+                () -> new Exception("category not exist")
+        );
+
+        User user = userService.getCurrentUser();
+
+        category.setName(dto.getName());
+        return CategoryMapper.toDTO(categoryRepository.save(category));
     }
 
     @Override
-    public void deleteCategory(Long id) {
+    public void deleteCategory(Long id) throws Exception, UserException {
+        Category category = categoryRepository.findById(id).orElseThrow(
+                () -> new Exception("category not exist")
+        );
 
+        User user = userService.getCurrentUser();
+
+        categoryRepository.delete(category);
     }
 }

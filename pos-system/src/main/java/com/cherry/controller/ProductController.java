@@ -1,7 +1,6 @@
 package com.cherry.controller;
 
 import com.cherry.exceptions.UserException;
-import com.cherry.mapper.ProductMapper;
 import com.cherry.modal.User;
 import com.cherry.payload.dto.ProductDTO;
 import com.cherry.payload.response.ApiResponse;
@@ -58,6 +57,18 @@ public class ProductController {
         );
     }
 
+    @GetMapping("/store/{storeId}/search")
+    public ResponseEntity<List<ProductDTO>> searchByKeyword(
+            @PathVariable Long storeId,
+            @RequestParam String keyword,
+            @RequestHeader("Authorization") String jwt) throws Exception {
+        return ResponseEntity.ok(
+                productService.searchProductKeyword(
+                        storeId,
+                        keyword
+                )
+        );
+    }
 
 
     @DeleteMapping("/{id}")
@@ -79,16 +90,5 @@ public class ProductController {
         );
     }
 
-    @GetMapping("/store/{storeId}/search")
-    public ResponseEntity<List<ProductDTO>> searchByKeyword(
-            @PathVariable Long storeId,
-            @RequestParam String keyword,
-            @RequestHeader("Authorization") String jwt) throws Exception {
-        return ResponseEntity.ok(
-                productService.searchProductKeyword(
-                        storeId,
-                        keyword
-                )
-        );
-    }
+
 }
