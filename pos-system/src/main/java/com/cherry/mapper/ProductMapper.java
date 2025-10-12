@@ -1,5 +1,6 @@
 package com.cherry.mapper;
 
+import com.cherry.modal.Category;
 import com.cherry.modal.Product;
 import com.cherry.modal.Store;
 import com.cherry.payload.dto.ProductDTO;
@@ -21,9 +22,12 @@ public class ProductMapper {
 //                .categoryId(product.get)
     }
 
-    public static Product toEntity(ProductDTO productDTO, Store store) {
+    public static Product toEntity(ProductDTO productDTO,
+                                   Store store, Category category) {
         return Product.builder()
                 .name(productDTO.getName())
+                .store(store)
+                .category(category)
                 .sku(productDTO.getSku())
                 .description(productDTO.getDescription())
                 .mrp(productDTO.getMrp())

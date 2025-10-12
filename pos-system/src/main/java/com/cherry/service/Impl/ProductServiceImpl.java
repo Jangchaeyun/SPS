@@ -1,10 +1,12 @@
 package com.cherry.service.Impl;
 
 import com.cherry.mapper.ProductMapper;
+import com.cherry.modal.Category;
 import com.cherry.modal.Product;
 import com.cherry.modal.Store;
 import com.cherry.modal.User;
 import com.cherry.payload.dto.ProductDTO;
+import com.cherry.repository.CategoryRepository;
 import com.cherry.repository.ProductRepository;
 import com.cherry.service.ProductService;
 import com.cherry.service.repository.StoreRepository;
@@ -21,6 +23,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final StoreRepository storeRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public ProductDTO createProduct(ProductDTO productDTO, User user) throws Exception {
@@ -30,7 +33,11 @@ public class ProductServiceImpl implements ProductService {
                 () -> new Exception("Store not found")
         );
 
-        Product product = ProductMapper.toEntity(productDTO, store);
+        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(
+                () -> new Exception("Category not found")
+        );
+
+        Product product = ProductMapper.toEntity(productDTO, store, category);
         Product savedProduct = productRepository.save(product);
         return ProductMapper.toDTO(savedProduct);
     }
@@ -40,6 +47,13 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(id).orElseThrow(
                 () -> new Exception("product not found")
         );
+        
+        if (productDTO.getCategoryId() != null) {
+            Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(
+                    () -> new Exception(("category not found"))
+            );
+            product.setCategory(category);
+        }
 
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());

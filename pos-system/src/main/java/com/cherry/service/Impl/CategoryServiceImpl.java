@@ -1,5 +1,6 @@
 package com.cherry.service.Impl;
 
+import com.cherry.domain.UserRole;
 import com.cherry.exceptions.UserException;
 import com.cherry.mapper.CategoryMapper;
 import com.cherry.modal.Category;
@@ -38,7 +39,9 @@ public class CategoryServiceImpl implements CategoryService {
                 .name(dto.getName())
                 .build();
 
-        return CategoryMapper.toDTO(category);
+        checkAuthority(user, category.getStore());
+
+        return CategoryMapper.toDTO(categoryRepository.save(category));
     }
 
     @Override
@@ -59,6 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
         User user = userService.getCurrentUser();
 
         category.setName(dto.getName());
+        checkAuthority(user, category.getStore());
         return CategoryMapper.toDTO(categoryRepository.save(category));
     }
 
@@ -70,6 +74,18 @@ public class CategoryServiceImpl implements CategoryService {
 
         User user = userService.getCurrentUser();
 
+        checkAuthority(user, category.getStore());
+
         categoryRepository.delete(category);
+    }
+
+    private void checkAuthority(User user, Store store) throws Exception {
+        boolean isAdmin = user.getRole().equals(UserRole.ROLE_STORE_ADMIN);
+        boolean isManager = user.getRole().equals(UserRole.ROLE_STORE_MANAGER);
+        boolean isSameStore = user.equals(store.getStoreAdmin());
+
+        if (!(isAdmin && isSameStore) && !isManager) {
+            throw new Exception("you don't have permission to manage this category");
+        }
     }
 }
