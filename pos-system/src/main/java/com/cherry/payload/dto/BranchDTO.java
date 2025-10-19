@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -24,9 +25,9 @@ public class BranchDTO {
 
     private List<String> workingDays;
 
-    private LocalDateTime openTime;
+    private LocalTime openTime;
 
-    private LocalDateTime closeTime;
+    private LocalTime closeTime;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

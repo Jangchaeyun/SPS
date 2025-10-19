@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -29,9 +30,9 @@ public class Branch {
     @ElementCollection
     private List<String> workingDays;
 
-    private LocalDateTime openTime;
+    private LocalTime openTime;
 
-    private LocalDateTime closeTime;
+    private LocalTime closeTime;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
