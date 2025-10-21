@@ -1,6 +1,8 @@
 package com.cherry.mapper;
 
+import com.cherry.modal.Branch;
 import com.cherry.modal.Inventory;
+import com.cherry.modal.Product;
 import com.cherry.payload.dto.InventoryDTO;
 
 public class InventoryMapper {
@@ -11,6 +13,16 @@ public class InventoryMapper {
 				.productId(inventory.getProduct().getId())
 				.product(ProductMapper.toDTO(inventory.getProduct()))
 				.quantity(inventory.getQuantity())
+				.build();
+	}
+	
+	public static Inventory toEntity(InventoryDTO inventoryDTO,
+			Branch branch,
+			Product product) {
+		return Inventory.builder()
+				.branch(branch)
+				.product(product)
+				.quantity(inventoryDTO.getQuantity())
 				.build();
 	}
 }
