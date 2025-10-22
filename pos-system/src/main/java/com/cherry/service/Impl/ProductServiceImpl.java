@@ -8,8 +8,9 @@ import com.cherry.modal.User;
 import com.cherry.payload.dto.ProductDTO;
 import com.cherry.repository.CategoryRepository;
 import com.cherry.repository.ProductRepository;
+import com.cherry.repository.StoreRepository;
 import com.cherry.service.ProductService;
-import com.cherry.service.repository.StoreRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

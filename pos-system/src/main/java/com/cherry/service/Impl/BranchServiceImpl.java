@@ -7,10 +7,11 @@ import com.cherry.modal.Store;
 import com.cherry.modal.User;
 import com.cherry.payload.dto.BranchDTO;
 import com.cherry.repository.BranchRepository;
+import com.cherry.repository.StoreRepository;
 import com.cherry.repository.UserRepository;
 import com.cherry.service.BranchService;
 import com.cherry.service.UserService;
-import com.cherry.service.repository.StoreRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -7,9 +7,10 @@ import com.cherry.modal.StoreContact;
 import com.cherry.modal.StoreStatus;
 import com.cherry.modal.User;
 import com.cherry.payload.dto.StoreDTO;
+import com.cherry.repository.StoreRepository;
 import com.cherry.service.StoreService;
 import com.cherry.service.UserService;
-import com.cherry.service.repository.StoreRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

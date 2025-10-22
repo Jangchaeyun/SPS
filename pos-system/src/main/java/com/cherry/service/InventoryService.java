@@ -5,10 +5,10 @@ import java.util.List;
 import com.cherry.payload.dto.InventoryDTO;
 
 public interface InventoryService {
-	InventoryDTO createInventory(InventoryDTO inventoryDTO);
-	InventoryDTO updateInventory(InventoryDTO inventoryDTO);
-	void deleteInventory(Long id);
-	InventoryDTO getInvetoryById(Long id);
+	InventoryDTO createInventory(InventoryDTO inventoryDTO) throws Exception;
+	InventoryDTO updateInventory(Long id, InventoryDTO inventoryDTO) throws Exception;
+	void deleteInventory(Long id) throws Exception;
+	InventoryDTO getInvetoryById(Long id) throws Exception;
 	InventoryDTO getInventoryByProductIdAndBranchId(Long productId, Long branchId);
 	List<InventoryDTO> getAllInventoryBranchId(Long branchId);
 }
